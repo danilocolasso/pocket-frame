@@ -9,10 +9,13 @@ LDFLAGS := -lSDL -lSDL_image -lSDL_ttf
 $(TARGET): src/main.c
 	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS)
 
+setup:
+	@./setup.sh
+
 clean:
 	rm -f $(TARGET)
 
 # build inside the toolchain container (from the project root):
 #   docker run --rm --platform linux/amd64 -v "$$PWD":/root/workspace \
 #     aemiii91/miyoomini-toolchain:latest bash -c '. /root/setup-env.sh && make'
-.PHONY: clean
+.PHONY: clean setup
