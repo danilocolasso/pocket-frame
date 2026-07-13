@@ -1,0 +1,6 @@
+{
+    "label": "Pocket Frame",
+    "icon": "../../Icons/Default/app/gallery.png",
+    "launch": "launch.sh",
+    "description": "A picture frame: shows a remote image, auto-refreshed"
+}
