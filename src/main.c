@@ -156,6 +156,16 @@ static void draw_text(SDL_Surface *dst, TTF_Font *f, int x, int y,
     SDL_FreeSurface(s);
 }
 
+/* key legend entry: key in green, description in gray, aligned by measure */
+static void draw_key(SDL_Surface *buf, TTF_Font *f, int x, int y,
+                     const char *key, const char *desc)
+{
+    int w = 0, h;
+    draw_text(buf, f, x, y, key, 0x39, 0xd3, 0x53);
+    TTF_SizeUTF8(f, key, &w, &h);
+    draw_text(buf, f, x + w + 10, y, desc, 0x8d, 0x96, 0xa0);
+}
+
 /* welcome menu: row 0 = source, row 1 = refresh interval */
 static void render_welcome(SDL_Surface *screen, SDL_Surface *buf,
                            TTF_Font *big, TTF_Font *small, int row)
@@ -180,10 +190,19 @@ static void render_welcome(SDL_Surface *screen, SDL_Surface *buf,
         format_interval(line, sizeof line);
         draw_text(buf, small, 58, 234, line, 0xe6, 0xed, 0xf3);
 
-        draw_text(buf, small, 40, 300, "UP/DOWN select   LEFT/RIGHT change   X edit url", 0x8d, 0x96, 0xa0);
-        draw_text(buf, small, 40, 328, "A start   B exit", 0x8d, 0x96, 0xa0);
+        draw_text(buf, small, 40, 268, "THIS MENU", 0x6e, 0x76, 0x81);
+        draw_key(buf, small, 40, 294, "A", "start");
+        draw_key(buf, small, 40, 320, "B", "exit");
+        draw_key(buf, small, 190, 294, "^ v", "select");
+        draw_key(buf, small, 190, 320, "< >", "change");
+        draw_key(buf, small, 40, 346, "X", "edit url");
 
-        draw_text(buf, big, 40, 396, "Press A to start", 0x39, 0xd3, 0x53);
+        draw_text(buf, small, 390, 268, "WHILE RUNNING", 0x6e, 0x76, 0x81);
+        draw_key(buf, small, 390, 294, "A", "force refresh");
+        draw_key(buf, small, 390, 320, "B", "back to menu");
+        draw_key(buf, small, 390, 346, "< >", "switch source");
+
+        draw_text(buf, big, 40, 400, "Press A to start", 0x39, 0xd3, 0x53);
     } else {
         /* no font available: signal with a green circle and carry on */
         fill_circle(buf, W / 2, H / 2, 12, SDL_MapRGB(buf->format, 0x39, 0xd3, 0x53));
@@ -228,8 +247,10 @@ static void render_edit(SDL_Surface *screen, SDL_Surface *buf,
         }
     }
 
-    draw_text(buf, small, 40, 420, "A type   B delete   START save   MENU cancel",
-              0x8d, 0x96, 0xa0);
+    draw_key(buf, small, 40, 420, "A", "type");
+    draw_key(buf, small, 148, 420, "B", "delete");
+    draw_key(buf, small, 280, 420, "START", "save");
+    draw_key(buf, small, 448, 420, "MENU", "cancel");
     flip180(buf, screen);
     SDL_Flip(screen);
 }
